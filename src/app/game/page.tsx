@@ -1,0 +1,105 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { sfx } from "@/components/retro/Sfx";
+
+export default function GamePage() {
+  return (
+    <main className="scanlines min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] px-6">
+      <div className="w-full max-w-6xl mx-auto py-10">
+        <div className="mb-6 flex items-center justify-between">
+          <Link className="pixel-mono text-xs underline" href="/" onClick={() => sfx.back()}>← MAIN MENU</Link>
+          <div className="pixel-mono text-xs opacity-80">Press Esc to exit</div>
+        </div>
+        <section className="border border-[var(--border)] bg-[var(--card)] p-4">
+          <h2 className="pixel-mono text-xl md:text-2xl tracking-widest text-[var(--primary)] mb-4">SNAKE</h2>
+          <SnakeGame />
+        </section>
+      </div>
+    </main>
+  );
+}
+
+function SnakeGame() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [score, setScore] = useState(0);
+  const dirRef = useRef<{ x: number; y: number }>({ x: 1, y: 0 });
+  const snakeRef = useRef<{ x: number; y: number }[]>([{ x: 8, y: 8 }]);
+  const foodRef = useRef<{ x: number; y: number }>({ x: 12, y: 8 });
+  const tickRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        // Navigate back to main menu
+        window.history.length > 1 ? window.history.back() : (window.location.href = "/");
+        return;
+      }
+      if (e.key === "ArrowUp" && dirRef.current.y !== 1) dirRef.current = { x: 0, y: -1 };
+      if (e.key === "ArrowDown" && dirRef.current.y !== -1) dirRef.current = { x: 0, y: 1 };
+      if (e.key === "ArrowLeft" && dirRef.current.x !== 1) dirRef.current = { x: -1, y: 0 };
+      if (e.key === "ArrowRight" && dirRef.current.x !== -1) dirRef.current = { x: 1, y: 0 };
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
+    const size = 20; // grid 20x20
+    const px = 14; // pixel size
+
+    const draw = () => {
+      if (!ctx) return;
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, px * size, px * size);
+      // food
+      ctx.fillStyle = "#e74c3c";
+      ctx.fillRect(foodRef.current.x * px, foodRef.current.y * px, px, px);
+      // snake
+      ctx.fillStyle = "#f1c40f";
+      snakeRef.current.forEach((s) => ctx.fillRect(s.x * px, s.y * px, px, px));
+    };
+
+    const step = () => {
+      const head = { ...snakeRef.current[0] };
+      head.x += dirRef.current.x;
+      head.y += dirRef.current.y;
+      // wrap
+      head.x = (head.x + size) % size;
+      head.y = (head.y + size) % size;
+      // collision with self
+      if (snakeRef.current.some((s, i) => i > 0 && s.x === head.x && s.y === head.y)) {
+        sfx.back();
+        setScore(0);
+        snakeRef.current = [{ x: 8, y: 8 }];
+        dirRef.current = { x: 1, y: 0 };
+      }
+      snakeRef.current = [head, ...snakeRef.current];
+      // eat
+      if (head.x === foodRef.current.x && head.y === foodRef.current.y) {
+        setScore((s) => s + 1);
+        sfx.select();
+        foodRef.current = { x: Math.floor(Math.random() * size), y: Math.floor(Math.random() * size) };
+      } else {
+        snakeRef.current.pop();
+      }
+      draw();
+    };
+
+    tickRef.current = window.setInterval(step, 120);
+    draw();
+    return () => {
+      if (tickRef.current) window.clearInterval(tickRef.current);
+    };
+  }, []);
+
+  return (
+    <div>
+      <canvas ref={canvasRef} width={280} height={280} className="w-full h-auto border border-[var(--border)]" />
+      <div className="pixel-mono text-xs mt-2">Score: {score}</div>
+    </div>
+  );
+}
