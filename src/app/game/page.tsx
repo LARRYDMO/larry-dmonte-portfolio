@@ -6,14 +6,14 @@ import { sfx } from "@/components/retro/Sfx";
 
 export default function GamePage() {
   return (
-    <main className="scanlines min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] px-6">
-      <div className="w-full max-w-6xl mx-auto py-10">
-        <div className="mb-6 flex items-center justify-between">
+    <main className="scanlines min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] px-4">
+      <div className="w-full max-w-4xl mx-auto py-4">
+        <div className="mb-4 flex items-center justify-between">
           <Link className="pixel-mono text-xs underline" href="/" onClick={() => sfx.back()}>← MAIN MENU</Link>
           <div className="pixel-mono text-xs opacity-80">Press Esc to exit</div>
         </div>
-        <section className="border border-[var(--border)] bg-[var(--card)] p-4">
-          <h2 className="pixel-mono text-xl md:text-2xl tracking-widest text-[var(--primary)] mb-4">SNAKE</h2>
+        <section className="border border-[var(--border)] bg-[var(--card)] p-3">
+          <h2 className="pixel-mono text-lg md:text-xl tracking-widest text-[var(--primary)] mb-3">SNAKE</h2>
           <SnakeGame />
         </section>
       </div>
@@ -97,8 +97,8 @@ function SnakeGame() {
   }, []);
 
   return (
-    <div>
-      <canvas ref={canvasRef} width={280} height={280} className="w-full h-auto border border-[var(--border)]" />
+    <div className="flex flex-col items-center">
+      <canvas ref={canvasRef} width={280} height={280} className="max-w-full h-auto border border-[var(--border)] mx-auto" style={{maxWidth: "min(280px, 80vw)", maxHeight: "min(280px, 60vh)"}} />
       <div className="pixel-mono text-xs mt-2">Score: {score}</div>
     </div>
   );

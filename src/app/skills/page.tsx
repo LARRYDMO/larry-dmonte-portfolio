@@ -3,34 +3,7 @@
 import RetroSection from "@/components/retro/RetroSection";
 import Link from "next/link";
 import { sfx } from "@/components/retro/Sfx";
-
-const skills = {
-  Languages: [
-    { name: "C/C++", prof: "Advanced" },
-    { name: "Java", prof: "Advanced" },
-    { name: "Python", prof: "Expert" },
-  ],
-  Web: [
-    { name: "HTML", prof: "Expert" },
-    { name: "CSS", prof: "Advanced" },
-    { name: "Bootstrap", prof: "Advanced" },
-    { name: "PHP", prof: "Intermediate" },
-    { name: "JavaScript", prof: "Advanced" },
-    { name: "React.js", prof: "Advanced" },
-  ],
-  Databases: [
-    { name: "MySQL", prof: "Advanced" },
-    { name: "PostgreSQL", prof: "Intermediate" },
-    { name: "MongoDB", prof: "Advanced" },
-  ],
-  Tools: [
-    { name: "Git", prof: "Advanced" },
-    { name: "VSCode", prof: "Advanced" },
-    { name: "Flask", prof: "Advanced" },
-    { name: "Pandas", prof: "Advanced" },
-    { name: "NumPy", prof: "Advanced" },
-  ],
-} as const;
+import { skills, profToXp } from "@/lib/xp";
 
 export default function SkillsPage() {
   return (
@@ -49,6 +22,7 @@ export default function SkillsPage() {
                     <div key={it.name} className="group relative border border-[var(--border)] bg-[var(--card)]/40 p-4 text-center">
                       <div className="text-2xl select-none">🎮</div>
                       <div className="pixel-mono text-[11px] mt-2 truncate">{it.name}</div>
+                      <div className="mt-2 text-[11px] pixel-mono opacity-90 xp-badge">+{profToXp(it.prof)} XP</div>
                       <div className="absolute left-1/2 -translate-x-1/2 -top-2 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-[var(--background)] border border-[var(--border)] px-2 py-1 text-[10px] pixel-mono">
                         {it.name} – {it.prof}
                       </div>

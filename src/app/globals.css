@@ -74,6 +74,9 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+  /* Optional page background pattern and contrast for a subtle texture */
+  --page-bg-pattern: url('/patterns/pixel-noise.svg'); /* subtle pixel tile */
+  --page-bg-contrast: rgba(255,255,255,0.02);
 }
 
 .dark {
@@ -96,6 +99,8 @@
 
 @layer base {
   *, *::before, *::after { box-sizing: border-box; }
+  /* Make base text larger for better readability */
+  html { font-size: 18px; }
   html, body { height: 100%; }
   body {
     margin: 0;
@@ -103,11 +108,181 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     text-rendering: optimizeSpeed;
+    font-size: 1rem; /* 18px */
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   /* Pixel helpers */
   img, canvas { image-rendering: pixelated; }
-  .pixel-font { font-family: var(--font-sans); letter-spacing: 0.02em; }
-  .pixel-mono { font-family: var(--font-mono); }
+  /* Slightly larger pixel-style fonts for headings and UI */
+  .pixel-font { font-family: var(--font-sans); letter-spacing: 0.03em; font-size: 1.125rem; }
+  .pixel-mono { font-family: var(--font-mono); font-size: 1rem; }
+
+  /* Tweak common UI elements for better spacing and click targets */
+  .pixel-font ul li a,
+  .pixel-font .pixel-mono,
+  .pixel-font p,
+  .pixel-font .pixel-mono a { font-size: 1.05rem; }
+
+  /* Increase spacing for the main grid gap to avoid cramped layout */
+  .grid.gap-8 { gap: 2.25rem; }
+
+  /* Layout panes */
+  .left-pane { padding: 1.5rem 0; max-width: 640px; display:flex; flex-direction:column; justify-content:flex-start; }
+  .right-pane { display:flex; align-items:center; justify-content:center; padding: 1rem 0; min-height: 420px; }
+  .right-pane-inner { align-items: center; gap: 1.25rem; display:flex; justify-content:center; width:100%; }
+  /* plate around the character to provide margin and padding */
+  .character-plate { display:flex; align-items:center; justify-content:center; padding: 1rem; margin: 0 1rem; }
+  /* Constrain character and keep pixel look across sizes. Use clamp for responsive scaling */
+  .character-img {
+    width: clamp(220px, 30vw, 420px);
+    height: auto;
+    max-width: 100%;
+    aspect-ratio: 360 / 460;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display:block;
+    margin: 0.5rem;
+  }
+
+  /* Flip card for character/stats */
+  .flip-card { perspective: 1200px; display:inline-block; }
+  .flip-card:focus { outline: none; }
+  .flip-card-inner { position: relative; width: clamp(220px, 30vw, 420px); height: auto; transform-style: preserve-3d; transition: transform 650ms cubic-bezier(.2,.9,.2,1); }
+  /* Programmatic flip (via .is-flipped) always takes precedence. */
+  .flip-card.is-flipped .flip-card-inner { transform: rotateY(180deg); }
+  /* Hover/focus should only trigger a flip when the card is NOT programmatically flipped. This avoids hover/<->JS state conflicts. */
+  .flip-card:not(.is-flipped):hover .flip-card-inner,
+  .flip-card:not(.is-flipped):focus .flip-card-inner { transform: rotateY(180deg); }
+  .flip-card-front, .flip-card-back { position: absolute; inset: 0; backface-visibility: hidden; display:flex; align-items:center; justify-content:center; }
+  .flip-card-front { z-index: 2; transform: rotateY(0deg); }
+  .flip-card-back { transform: rotateY(180deg); padding: 1rem; box-sizing: border-box; }
+
+  .stats-card { width: 100%; max-width: 420px; background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.6)); border-radius: 8px; padding: 1rem; box-shadow: 0 8px 24px rgba(0,0,0,0.5); color: var(--foreground); }
+  .stats-card h3 { margin: 0 0 0.6rem 0; font-size: 1rem; }
+  .stat { margin-bottom: 0.7rem; }
+  .stat-label { font-size: 0.95rem; font-weight: 700; color: color-mix(in oklch, var(--foreground), var(--primary) 8%); }
+  .stat-meta { font-size: 0.85rem; opacity: 0.7; margin-top: 0.18rem; }
+  .stat-bar { background: rgba(255,255,255,0.06); height: 12px; border-radius: 6px; overflow: hidden; margin-top: 0.25rem; }
+  .stat-fill { height: 100%; background: linear-gradient(90deg, var(--primary), color-mix(in oklch, var(--primary), var(--accent) 20%)); transform-origin: left center; transition: width 900ms cubic-bezier(.2,.9,.2,1); box-shadow: inset 0 -6px 16px rgba(0,0,0,0.35);
+  }
+  .stat-fill.special { background: linear-gradient(90deg, color-mix(in oklch, var(--accent), white 6%), color-mix(in oklch, var(--primary), var(--accent) 30%)); }
+
+  /* Ensure flip-card works on mobile: toggle via .is-flipped (JS) and allow hover also on desktop */
+  @media (max-width: 767px) {
+    .flip-card-inner { transition: transform 420ms ease; }
+    .stat-bar { height: 10px; }
+  }
+
+  /* Per-stat color accents */
+  .stat-fill.health { background: linear-gradient(90deg, #31c48d, #16a34a); }
+  .stat-fill.strength { background: linear-gradient(90deg, #ffd166, #ff8a00); }
+  .stat-fill.speed { background: linear-gradient(90deg, #60a5fa, #1e40af); }
+  .stat-fill.special { background: linear-gradient(90deg, #ff66cc, #7c3aed); position: relative; overflow: hidden; }
+
+  /* Sheen/pulse animation for special move */
+  .stat-fill.special::after {
+    content: "";
+    position: absolute; top: -40%; left: -30%; width: 60%; height: 180%;
+    background: linear-gradient(120deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0.08) 100%);
+    transform: rotate(20deg) translateX(-120%);
+    animation: sheen 2.6s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes sheen { 0% { transform: rotate(20deg) translateX(-120%); opacity: 0.9 } 50% { transform: rotate(20deg) translateX(120%); opacity: 1 } 100% { transform: rotate(20deg) translateX(320%); opacity: 0.9 } }
+
+  /* Gentle pulse behind special bar */
+  .stat-fill.special { box-shadow: 0 0 12px rgba(124,58,237,0.12), inset 0 -6px 12px rgba(0,0,0,0.35); }
+
+  /* Flip-card config toggle/button */
+  .flip-config-toggle { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.35); border: 0; color: var(--foreground); padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+  .flip-config-panel { position: absolute; top: 40px; right: 6px; background: rgba(0,0,0,0.6); border-radius: 8px; padding: 0.6rem; width: 200px; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+  .flip-config-panel input[type='range'] { width: 100%; margin-top: 6px; }
+
+  /* XP badge style — positioned bottom-right inside cards */
+  .xp-badge {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background: linear-gradient(180deg, #16a34a, #08823a);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(6,78,59,0.18), inset 0 -4px 8px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* optional subtle site-wide background (keeps overall tone dark) */
+  .scanlines {
+    background-image: var(--page-bg-pattern);
+    /* tile the tiny SVG to create a subtle pixel grid */
+    background-repeat: repeat;
+    background-size: 8px 8px;
+    /* overlay a tiny semi-transparent tint for depth */
+    background-blend-mode: overlay;
+    background-color: color-mix(in oklch, var(--background), var(--page-bg-contrast));
+    animation: bg-pan 18s linear infinite;
+  }
+
+  @keyframes bg-pan {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 20% 10%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* soft vignette/plate behind character to make it pop against black */
+  .right-pane::before {
+    content: "";
+    position: absolute;
+    width: min(520px, 48%);
+    height: min(520px, 60%);
+    right: 10%;
+    top: 8%;
+    transform: translateX(0%);
+    border-radius: 12px;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 50%);
+    filter: blur(18px) saturate(1.05);
+  }
+
+  /* Menu styling */
+  .pixel-font ul { padding: 0; margin: 0; list-style: none; }
+  .pixel-font ul li { margin-bottom: 0.9rem; }
+  .pixel-font a { display: inline-block; padding: 6px 8px; border-radius: 4px; transition: color 120ms ease, transform 120ms ease; }
+  .pixel-font a:hover { transform: translateX(4px); }
+  .pixel-font .active { color: var(--primary); }
+
+  /* Headings and labels */
+  h1 { font-size: clamp(36px, 6.5vw, 92px); margin: 0 0 0.3rem 0; }
+  p, li, a, h2, h3 { font-size: 1.05rem; }
+
+  /* Responsive: stack columns on small screens */
+  @media (max-width: 767px) {
+    .grid { grid-template-columns: 1fr; }
+    .right-pane { margin-top: 1.25rem; min-height: auto; }
+    h1 { font-size: clamp(28px, 8vw, 56px); }
+    /* on mobile, stack and make the character slightly smaller */
+    .character-plate { margin: 0 auto; }
+    .character-img { width: clamp(200px, 48vw, 320px); }
+  }
+
+  /* Make Tailwind small utilities more readable on this design */
+  /* These override the compiled utilities so the UI isn't tiny. */
+  .text-xs { font-size: 0.95rem !important; } /* ~17px */
+  .text-sm { font-size: 1.05rem !important; } /* ~19px */
+  .text-base { font-size: 1.15rem !important; } /* ~20.7px */
+  .text-lg { font-size: 1.35rem !important; } /* ~24px */
+  /* Escape Tailwind arbitrary class selectors for PostCSS compatibility */
+  .text-\[10px\], .text-\[11px\], .text-\[12px\] { font-size: 0.95rem !important; }
+
+  /* Ensure form labels, small captions, and pixel-mono elements are readable */
+  label, small, caption, .pixel-mono { font-size: 1.05rem !important; }
+
+  /* Improve link hit targets and spacing */
+  a { line-height: 1.4; }
   .scanlines {
     position: relative;
   }
@@ -151,6 +326,63 @@
 }
 
 /* Hide Next.js error overlay portal */
+/* Background video sits behind page content. Keep it subtle and non-interactive. */
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0.14;
+  z-index: 0;
+  filter: saturate(0.95) blur(0px);
+  transform: translateZ(0);
+}
+
+/* Ensure the page content renders above the video */
+.scanlines > *:not(.bg-video) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Respect users who request reduced motion and avoid heavy video on small screens */
+@media (prefers-reduced-motion: reduce) {
+  .bg-video { display: none; }
+}
+@media (max-width: 767px) {
+  .bg-video { display: none; }
+}
+
 nextjs-portal {
   display: none !important;
+}
+
+/* Global XP pill wrapper (used in layout) — overrides the in-card xp-badge absolute placement */
+.global-xp-wrap {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+.global-xp {
+  /* override xp-badge absolute positioning */
+  position: relative !important;
+  right: auto !important;
+  bottom: auto !important;
+  display: inline-block;
+  white-space: nowrap;
+  max-width: calc(100vw - 2rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 10px !important;
+  font-size: 0.95rem !important;
+}
+
+@media (max-width: 480px) {
+  .global-xp-wrap { right: 0.5rem; left: 0.5rem; justify-content: flex-end; }
+  .global-xp { font-size: 0.85rem !important; padding: 4px 8px !important; }
 }
