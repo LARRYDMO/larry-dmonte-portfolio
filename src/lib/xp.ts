@@ -93,7 +93,15 @@ export const skills = {
   Languages: [ { name: 'C/C++', prof: 'Advanced' }, { name: 'Java', prof: 'Advanced' }, { name: 'Python', prof: 'Expert' } ],
   Web: [ { name: 'HTML', prof: 'Expert' }, { name: 'CSS', prof: 'Advanced' }, { name: 'Bootstrap', prof: 'Advanced' }, { name: 'PHP', prof: 'Intermediate' }, { name: 'JavaScript', prof: 'Advanced' }, { name: 'React.js', prof: 'Advanced' } ],
   Databases: [ { name: 'MySQL', prof: 'Advanced' }, { name: 'PostgreSQL', prof: 'Intermediate' }, { name: 'MongoDB', prof: 'Advanced' } ],
-  Tools: [ { name: 'Git', prof: 'Advanced' }, { name: 'VSCode', prof: 'Advanced' }, { name: 'Flask', prof: 'Advanced' }, { name: 'Pandas', prof: 'Advanced' }, { name: 'NumPy', prof: 'Advanced' } ],
+  Tools: [
+    { name: 'Git', prof: 'Advanced' },
+    { name: 'Docker', prof: 'Basic' },
+    { name: 'Redis', prof: 'Intermediate' },
+    { name: 'Flask', prof: 'Advanced' },
+    { name: 'LLM', prof: 'Advanced' },
+    { name: 'RAG', prof: 'Intermediate' },
+    { name: 'GenAI', prof: 'Intermediate' }
+  ],
 } as const;
 
 export const profToXp = (prof: string) => {
