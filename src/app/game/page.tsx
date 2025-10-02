@@ -2,7 +2,25 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { sfx } from "@/components/retro/Sfx";
+// Lightweight inline SFX (replacing deprecated retro Sfx import)
+const sfx = (() => {
+  let ctx: AudioContext | null = null;
+  const ensure = () => {
+    if (typeof window === 'undefined') return null;
+    if (!ctx) ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    return ctx;
+  };
+  const beep = (freq: number, duration=0.08, volume=0.05) => {
+    const ac = ensure(); if (!ac) return;
+    const osc = ac.createOscillator(); const gain = ac.createGain();
+    osc.type = 'square'; osc.frequency.value = freq; gain.gain.value = volume;
+    osc.connect(gain); gain.connect(ac.destination); osc.start(); osc.stop(ac.currentTime + duration);
+  };
+  return {
+    back: () => beep(200,0.1,0.06),
+    select: () => beep(280,0.12,0.06),
+  };
+})();
 
 export default function GamePage() {
   return (

@@ -1,33 +1,28 @@
 "use client";
-
-import RetroSection from "@/components/retro/RetroSection";
-import Link from "next/link";
-import { sfx } from "@/components/retro/Sfx";
+import Section from "@/components/Section";
 import { achievements } from "@/lib/xp";
+import SubPageHeader from "@/components/SubPageHeader";
+import { motion } from "framer-motion";
 
 export default function AchievementsPage() {
-
   return (
-    <main className="scanlines min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] px-6">
-      <div className="w-full max-w-6xl mx-auto py-10">
-        <div className="mb-6">
-          <Link className="pixel-mono text-xs underline" href="/" onClick={() => sfx.back()}>← MAIN MENU</Link>
-        </div>
-
-        <RetroSection id="achievements" title="ACHIEVEMENTS">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {achievements.map((a) => (
-              <div key={a.name} className="group relative border border-[var(--border)] bg-[var(--card)]/40 p-6 text-center">
-                <div className="text-3xl">🏆</div>
-                <div className="pixel-mono text-xs mt-2">{a.name}</div>
-                <div className="xp-badge">+{a.xp ?? 0} XP</div>
-                <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-[var(--background)] border border-[var(--border)] px-2 py-1 text-[10px] pixel-mono">
-                  {a.detail}
+    <main className="ai-page min-h-screen w-full bg-slate-950 text-slate-100 px-6">
+      <div className="ai-page-bg" />
+      <div className="relative w-full max-w-7xl mx-auto py-10">
+        <SubPageHeader title="Achievements" subtitle="Notable milestones, awards, and recognitions." />
+        <Section className="pt-0" id="achievements" title="" subtitle="">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {achievements.map(a => (
+              <motion.div whileHover={{ y:-4 }} key={a.name} className="group relative glass-card p-5 flex flex-col overflow-hidden">
+                <div className="absolute inset-px rounded-[14px] bg-gradient-to-br from-sky-500/10 via-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition" />
+                <div className="relative flex flex-col gap-2">
+                  <h3 className="text-sm font-semibold tracking-wide text-sky-300 leading-snug">{a.name}</h3>
+                  <p className="text-[11px] uppercase tracking-wider text-slate-400">{a.detail}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </RetroSection>
+        </Section>
       </div>
     </main>
   );
