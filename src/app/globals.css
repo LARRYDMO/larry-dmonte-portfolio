@@ -392,6 +392,20 @@ nextjs-portal {
 .ds-array-block, .ds-stack-block { box-shadow:0 4px 28px -8px rgba(0,0,0,0.4),0 0 0 1px rgba(56,189,248,0.08); }
 .ds-stack-block .flex-col > div:last-child { margin-bottom:0; }
 
+/* Mobile enhancements */
+.no-scrollbar::-webkit-scrollbar { display:none; }
+.no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+
+@media (max-width: 640px) {
+  .ds-nav-wrapper .text-\[11px\] { font-size: 0.7rem !important; }
+  .ds-nav-wrapper button { padding: 0.35rem 0.55rem; }
+  .ds-nav-wrapper [class*="border-slate-700/60"] { border-width:1px; }
+  .ds-nav-wrapper .rounded-xl { border-radius: 0.85rem; padding: 1rem !important; }
+  .ds-nav-wrapper [class*="min-w-[72px]"] { min-width: 60px; }
+  .ds-nav-wrapper [class*="w-[96px]"] { width: 80px; }
+  .ds-nav-wrapper .flex-nowrap { overflow-x:auto; }
+}
+
 
 @media (max-width: 480px) {
   .global-xp-wrap { right: 0.5rem; left: 0.5rem; justify-content: flex-end; }
