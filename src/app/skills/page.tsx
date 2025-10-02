@@ -1,38 +1,33 @@
 "use client";
 
-import RetroSection from "@/components/retro/RetroSection";
-import Link from "next/link";
-import { sfx } from "@/components/retro/Sfx";
-import { skills, profToXp } from "@/lib/xp";
+import Section from "@/components/Section";
+import SubPageHeader from "@/components/SubPageHeader";
+import { skills } from "@/lib/xp";
 
 export default function SkillsPage() {
   return (
-    <main className="scanlines min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] px-6">
-      <div className="w-full max-w-6xl mx-auto py-10">
-        <div className="mb-6">
-          <Link className="pixel-mono text-xs underline" href="/" onClick={() => sfx.back()}>← MAIN MENU</Link>
-        </div>
-        <RetroSection id="skills" title="LANGUAGES & SKILLS">
-          <div className="space-y-8">
+    <main className="ai-page min-h-screen w-full bg-slate-950 text-slate-100 px-6">
+      <div className="ai-page-bg" />
+      <div className="relative w-full max-w-7xl mx-auto py-10">
+        <SubPageHeader title="Tech Stack" subtitle="Core languages, frameworks & tools I use to build scalable, intelligent systems." />
+        <Section className="pt-2" id="skills" title="" subtitle="">
+          <div className="space-y-12">
             {Object.entries(skills).map(([cat, items]) => (
               <div key={cat}>
-                <h4 className="pixel-mono text-sm tracking-widest text-[var(--secondary)] mb-3">{cat}</h4>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {items.map((it) => (
-                    <div key={it.name} className="group relative border border-[var(--border)] bg-[var(--card)]/40 p-4 text-center">
-                      <div className="text-2xl select-none">🎮</div>
-                      <div className="pixel-mono text-[11px] mt-2 truncate">{it.name}</div>
-                      <div className="mt-2 text-[11px] pixel-mono opacity-90 xp-badge">+{profToXp(it.prof)} XP</div>
-                      <div className="absolute left-1/2 -translate-x-1/2 -top-2 opacity-0 group-hover:opacity-100 transition pointer-events-none bg-[var(--background)] border border-[var(--border)] px-2 py-1 text-[10px] pixel-mono">
-                        {it.name} – {it.prof}
-                      </div>
+                <h3 className="text-sm uppercase tracking-[0.25em] text-slate-400 mb-4">{cat}</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {items.map(it => (
+                    <div key={it.name} className="group relative glass-card p-4 flex flex-col items-start gap-2">
+                      <span className="text-[13px] font-medium tracking-wide text-slate-200 group-hover:text-white">{it.name}</span>
+                      <span className="text-[11px] uppercase tracking-wider text-sky-300/70">{it.prof}</span>
+                      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition pointer-events-none bg-gradient-to-tr from-sky-500/5 via-indigo-500/5 to-transparent" />
                     </div>
                   ))}
                 </div>
               </div>
             ))}
           </div>
-        </RetroSection>
+        </Section>
       </div>
     </main>
   );
