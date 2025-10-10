@@ -18,6 +18,7 @@ export default function Home() {
   const domains = [
     { label: 'Machine Learning & Model Integration', color: 'from-sky-400 to-cyan-300' },
     { label: 'Full‑stack Engineering (API + Frontend)', color: 'from-fuchsia-400 to-pink-300' },
+    { label: '.NET / ASP.NET Core', color: 'from-emerald-400 to-green-300' },
     { label: 'Observability & Performance', color: 'from-purple-400 to-indigo-300' },
   ];
   const tags = ['Python','React','Flask','MongoDB','PostgreSQL','C++','NLP','FastAPI'];

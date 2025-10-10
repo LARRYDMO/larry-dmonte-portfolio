@@ -27,9 +27,23 @@ export default function DataStructureNav({ items, className = '' }: DataStructur
 	const pushStack = () => setStackItems(s => s.length < items.length ? [...s, items[s.length]] : s);
 	const resetStack = () => setStackItems([...items]);
 
-	// Queue
+	// Queue (prefill with all items by default)
 	const [queueItems, setQueueItems] = useState<Item[]>(() => [...items]);
-	const enqueue = () => setQueueItems(q => q.length < items.length ? [...q, items[q.length]] : q);
+	const enqueue = () => setQueueItems(q => {
+		if (q.length >= items.length) return q;
+		// if empty, push the first item
+		if (q.length === 0) return [items[0]];
+		// find the original index of the current tail and append the next one circularly
+		const tail = q[q.length - 1];
+		const tailIdx = items.findIndex(it => it.href === tail.href);
+		const nextIdx = (tailIdx + 1) % items.length;
+		// safety: if next item is already present (shouldn't happen when q.length < items.length), find first missing
+		if (q.some(it => it.href === items[nextIdx].href)) {
+			const missing = items.find(it => !q.some(qi => qi.href === it.href));
+			return missing ? [...q, missing] : q;
+		}
+		return [...q, items[nextIdx]];
+	});
 	const dequeue = () => setQueueItems(q => q.slice(1));
 	const resetQueue = () => setQueueItems([...items]);
 
