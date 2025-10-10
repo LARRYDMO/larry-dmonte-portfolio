@@ -84,15 +84,26 @@ export const projects = [
     ],
     links: { github: '', demo: '' }
   }
+  ,{
+    id: 'job-portal',
+    title: 'Job Portal',
+    stack: 'ASP.NET Core, EF Core, SQLite, React, Razor Pages',
+    desc: 'Enterprise-friendly job listing and application platform with authentication, resume uploads, and employer tools.',
+    features: [
+      'Added JWT/cookie auth, resume uploads, and application status workflow.',
+      'Implemented pagination, filtering, saved jobs, and employer dashboard'
+    ],
+    links: { github: '', demo: '' }
+  }
 ];
 
-export const projectXpMap: Record<string, number> = { moneymitra: 80, imvn: 120, ovs: 60, movies: 90, 'news-sent': 70, 'audio-trans': 50, 'speech-sent': 60 };
+export const projectXpMap: Record<string, number> = { moneymitra: 80, imvn: 120, ovs: 60, movies: 90, 'news-sent': 70, 'audio-trans': 50, 'speech-sent': 60, 'job-portal': 100 };
 export const getProjectXp = (id: string) => projectXpMap[id] ?? 40;
 
 export const skills = {
-  Languages: [ { name: 'C/C++', prof: 'Advanced' }, { name: 'Java', prof: 'Advanced' }, { name: 'Python', prof: 'Expert' } ],
-  Web: [ { name: 'HTML', prof: 'Expert' }, { name: 'CSS', prof: 'Advanced' }, { name: 'Bootstrap', prof: 'Advanced' }, { name: 'PHP', prof: 'Intermediate' }, { name: 'JavaScript', prof: 'Advanced' }, { name: 'React.js', prof: 'Advanced' } ],
-  Databases: [ { name: 'MySQL', prof: 'Advanced' }, { name: 'PostgreSQL', prof: 'Intermediate' }, { name: 'MongoDB', prof: 'Advanced' } ],
+  Languages: [ { name: 'C/C++', prof: 'Advanced' }, { name: 'Java', prof: 'Advanced' }, { name: 'Python', prof: 'Expert' }, { name: 'C#/.NET', prof: 'Advanced' } ],
+  Web: [ { name: 'HTML', prof: 'Expert' }, { name: 'CSS', prof: 'Advanced' }, { name: 'Bootstrap', prof: 'Advanced' }, { name: 'PHP', prof: 'Intermediate' }, { name: 'JavaScript', prof: 'Advanced' }, { name: 'React.js', prof: 'Advanced' }, { name: 'ASP.NET Core', prof: 'Intermediate' } ],
+  Databases: [ { name: 'MySQL', prof: 'Advanced' }, { name: 'PostgreSQL', prof: 'Intermediate' }, { name: 'MongoDB', prof: 'Advanced' }, { name: 'SQLite', prof: 'Intermediate' } ],
   Tools: [
     { name: 'Git', prof: 'Advanced' },
     { name: 'Docker', prof: 'Basic' },
@@ -100,7 +111,9 @@ export const skills = {
     { name: 'Flask', prof: 'Advanced' },
     { name: 'LLM', prof: 'Advanced' },
     { name: 'RAG', prof: 'Intermediate' },
-    { name: 'GenAI', prof: 'Intermediate' }
+    { name: 'GenAI', prof: 'Intermediate' },
+    { name: 'AWS S3', prof: 'Intermediate' },
+    { name: 'AWS Lambda', prof: 'Intermediate' }
   ],
 } as const;
 
@@ -128,7 +141,7 @@ export const experiences = [ {
   tech: ['Stable Diffusion', 'Python', 'Flask', 'SAM']
 } ];
 
-export const achievements = [ { name: 'Finalist – GDA', detail: 'Game Development Association', xp: 80 }, { name: 'Finalist – SIH 2023', detail: 'Smart India Hackathon', xp: 80 }, { name: 'Certified – OOP in Java', detail: 'Certification', xp: 40 } ];
+export const achievements = [ { name: 'Finalist – GDA', detail: 'Game Development Association', xp: 80 }, { name: 'Finalist – SIH 2023', detail: 'Smart India Hackathon', xp: 80 }, { name: 'Certified – OOP in Java', detail: 'Certification', xp: 40 }, { name: 'Oracle Cloud Infrastructure 2025 Generative AI Professional Certification', detail: 'Certification', xp: 80 } ];
 
 export function getTotalXp() {
   const projectTotal = Object.values(projectXpMap).reduce((s, v) => s + v, 0);
