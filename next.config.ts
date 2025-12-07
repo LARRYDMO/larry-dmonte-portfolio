@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
-const enableTurbopack = process.env.NEXT_PRIVATE_TURBOPACK !== '0' && process.env.TURBOPACK !== '0';
+// Default to Turbopack disabled in CI (Vercel) unless explicitly enabled.
+// This avoids Turbopack-specific read errors on some environments.
+const enableTurbopack = (process.env.NEXT_PRIVATE_TURBOPACK === '1' || process.env.TURBOPACK === '1');
 
 const nextConfig: NextConfig = {
   images: {
