@@ -141,6 +141,21 @@ export const experiences = [ {
   tech: ['Stable Diffusion', 'Python', 'Flask', 'SAM']
 } ];
 
+// Added Neo Wealth & Asset Management internship
+experiences.push({
+  id: 'neo-wealth',
+  title: 'Development & Automation Intern – Neo Wealth & Asset Management',
+  timeframe: 'Nov 2025 – Present',
+  xp: 80,
+  summary: 'Developed internal automation and tooling to streamline reporting and operational workflows for wealth management services.',
+  desc: 'Working on automating data ingestion, report generation, and deployment pipelines to reduce manual effort and improve reliability across internal tools. Collaborated with engineering and operations teams to build maintainable automation scripts and CI/CD workflows that integrated with existing services.',
+  responsibilities: [
+    'Developing a dashboard to display logs',
+    'Developing dashboards and integrations for Netskope, CrowdStrike, UniFlow, and CyberArk'
+  ],
+  tech: ['Python', 'SQL','REST APIs', 'PowerShell', 'Netskope', 'CrowdStrike', 'UniFlow', 'CyberArk']
+});
+
 export const achievements = [ { name: 'Finalist – GDA', detail: 'Game Development Association', xp: 80 }, { name: 'Finalist – SIH 2023', detail: 'Smart India Hackathon', xp: 80 }, { name: 'Certified – OOP in Java', detail: 'Certification', xp: 40 }, { name: 'Oracle Cloud Infrastructure 2025 Generative AI Professional Certification', detail: 'Certification', xp: 80 } ];
 
 export function getTotalXp() {
