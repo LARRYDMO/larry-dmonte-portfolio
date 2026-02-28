@@ -59,6 +59,7 @@ export default function ContactPage() {
                   <li><a className="ai-link" href="mailto:larrydmonte21@gmail.com">larrydmonte21@gmail.com</a></li>
                   <li><a className="ai-link" href="https://github.com/LARRYDMO" target="_blank" rel="noreferrer">GitHub</a></li>
                   <li><a className="ai-link" href="https://www.linkedin.com/in/larry-dmonte-262543252/" target="_blank" rel="noreferrer">LinkedIn</a></li>
+                  <li><a className="ai-link" href="https://leetcode.com/u/larrydmonte21/" target="_blank" rel="noreferrer">LeetCode</a></li>
                 </ul>
               </div>
               <div className="glass-card p-6">
