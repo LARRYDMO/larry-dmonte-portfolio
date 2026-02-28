@@ -93,6 +93,7 @@ export default function Home() {
         <a className="hover:text-sky-300 transition" href="https://github.com/LARRYDMO" target="_blank" rel="noreferrer">GitHub</a>
         <a className="hover:text-sky-300 transition" href="https://www.linkedin.com/in/larry-dmonte-262543252/" target="_blank" rel="noreferrer">LinkedIn</a>
         <a className="hover:text-sky-300 transition" href="mailto:larrydmonte21@gmail.com">Email</a>
+        <a className="hover:text-sky-300 transition" href="https://leetcode.com/u/larrydmonte21/" target="_blank" rel="noreferrer">LeetCode</a>
       </footer>
     </main>
   );
